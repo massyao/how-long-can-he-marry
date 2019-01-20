@@ -1,0 +1,97 @@
+<html>
+<body>
+
+<script>
+
+	let chatRefuse = function() {
+		return 	Math.ceil(7 * Math.random())
+	}
+
+	let dateRefuse = function() {
+		return 	Math.ceil(4 * Math.random()) * 7
+	}
+	
+	class singleDogWantToMarry{
+		constructor(name,age){
+			this.girls = Array.from(new Array(100), (e, i) => [0, 0, 0]) // chat ,date ,status ,0=not meet 1=chatting 2=dating 3=agree -1=refuse
+			// this.day = 0
+			this.eternal = 100000000
+			this.chatRefuseRate = 0.14285714285714285
+			this.dateRefuseRate = 0.25
+		}
+
+		tigtag() {
+			for (let day = 0 ; day < this.eternal; day++) {
+				if (day < 100) {
+					this.girls[day][2] = 1
+					// console.log('boy chat with  girl ', day ,' at day', day)
+				}
+				for(let girl = 0 ;girl < Math.min(day, 100); girl++) {
+					if(this.girls[girl][2] > 0) {
+						if(this.girls[girl][2] === 1) {
+							// chatting
+							let chatResult = Math.random() - this.chatRefuseRate > 0
+							if(chatResult) {
+								this.girls[girl][0] =  this.girls[girl][0] + 1
+							} else {
+								// console.log('girl ', girl ,' refuse him at day', day)
+								this.girls[girl][2] = -1	
+							}
+							// can date
+							if (this.girls[girl][0] === 7) {
+								this.girls[girl][2] = 2
+								// console.log('lucky boy can date girl ', girl ,' at day', day)
+							}
+						}
+						if(this.girls[girl][2] === 2) {
+							let dateResult = Math.random() - this.dateRefuseRate > 0
+							if(dateResult) {
+								this.girls[girl][1] =  this.girls[girl][1] + 7
+							} else {
+								// console.log('girl ', girl ,' refuse him at day', day)
+								this.girls[girl][2] = -1	
+							}
+							if (this.girls[girl][1] > 27) {
+								console.log('lucky boy find his soul mate', girl ,' at day', day + 24)
+								return day + 24
+							}
+						}
+					}
+					
+					if (day > 100) {
+						let count = 0
+						for(let i = 0;i< 99;i++) {
+							if(this.girls[i][2] === -1) {
+								count++
+							}
+							if(count> 98){
+								console.log('boy get all refusation at day', day)
+								return 0
+							}
+						}
+						
+					}
+
+					
+				}
+			}
+		}
+	}
+
+	var round = new singleDogWantToMarry()
+	var days = round.tigtag()
+	console.log(days)
+	let allDay = 0
+	let allRound = 10000
+	for(let i = 0;i< allRound;i++) {
+		let round = new singleDogWantToMarry()
+		let days = round.tigtag()
+		allDay = allDay + days
+	}
+	let averageDay = allDay / allRound
+	console.log('averageDay', averageDay)
+	
+</script>
+</body>
+
+</html>
